@@ -63,6 +63,7 @@ class AwsIpRangeMiddleware
     {
         $ipRanges = array_column($array['prefixes'], 'ip_prefix');
         $ipV6Ranges = array_column($array['ipv6_prefixes'], 'ipv6_prefix');
+
         return array_merge($ipRanges, $ipV6Ranges);
     }
 }
