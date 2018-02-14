@@ -60,8 +60,8 @@ class AwsIpRangeMiddleware
      */
     private function mergeRanges($array): array
     {
-        $ipRanges = collect($array['prefixes'])->pluck('ip_prefix');
-        $ipV6Ranges = collect($array['ipv6_prefixes'])->pluck('ipv6_prefix');
-        return $ipRanges->merge($ipV6Ranges)->toArray();
+        $ipRanges = array_column($array['prefixes'], 'ip_prefix');
+        $ipV6Ranges = array_column($array['ipv6_prefixes'], 'ipv6_prefix');
+        return array_merge($ipRanges, $ipV6Ranges);
     }
 }

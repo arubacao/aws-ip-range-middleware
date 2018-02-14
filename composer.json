@@ -19,7 +19,6 @@
         "php": "^7.0",
         "graham-campbell/guzzle-factory": "^3.0",
         "illuminate/cache": "^5.0",
-        "illuminate/support": "^5.0",
         "symfony/http-foundation": "~2.0|~3.0|~4.0"
     },
     "require-dev": {
