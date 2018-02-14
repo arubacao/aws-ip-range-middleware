@@ -1,0 +1,44 @@
+{
+    "name": "arubacao/aws-ip-range-middleware",
+    "description": "Laravel Middleware for Amazon Web Services (AWS) IP Address Range",
+    "keywords": [
+        "laravel",
+        "aws",
+        "ip-range",
+        "middleware"
+    ],
+    "homepage": "https://github.com/arubacao/aws-ip-range-middleware",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Christopher Lass",
+            "homepage": "https://github.com/arubacao"
+        }
+    ],
+    "require": {
+        "php": "^7.0",
+        "graham-campbell/guzzle-factory": "^3.0",
+        "illuminate/cache": "^5.0",
+        "symfony/http-foundation": "~3.0|~4.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "~3.0",
+        "phpunit/phpunit": ">=4.8.36 || >=5.7.21 || ~6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Arubacao\\AwsIpRange\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Arubacao\\AwsIpRange\\Test\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
