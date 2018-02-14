@@ -26,7 +26,7 @@ class AwsIpRangeMiddlewareTest extends \Orchestra\Testbench\TestCase
         if (is_a($response, 'Illuminate\Foundation\Testing\TestResponse')) {
             $response->assertStatus(403);
         } else {
-            $this->seeStatusCode(403);
+            $this->assertResponseStatus(403);
         }
     }
 
@@ -55,7 +55,7 @@ class AwsIpRangeMiddlewareTest extends \Orchestra\Testbench\TestCase
             if (is_a($response, 'Illuminate\Foundation\Testing\TestResponse')) {
                 $response->assertStatus(200);
             } else {
-                $this->seeStatusCode(200);
+                $this->assertResponseStatus(200);
             }
         }
     }
