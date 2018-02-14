@@ -40,7 +40,7 @@ class AwsIpRangeMiddleware
     }
 
     /**
-     * Fetch ip-ranges from aws
+     * Fetch ip-ranges from aws.
      *
      * @return array
      */
@@ -49,11 +49,12 @@ class AwsIpRangeMiddleware
         $client = GuzzleFactory::make([]);
         $response = $client->get(self::URL);
         $json = $response->getBody()->getContents();
+
         return \GuzzleHttp\json_decode($json, true);
     }
 
     /**
-     * Merge ipv4 & ipv6
+     * Merge ipv4 & ipv6.
      *
      * @param $array
      * @return array

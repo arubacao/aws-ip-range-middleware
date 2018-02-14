@@ -23,7 +23,7 @@ class AwsIpRangeMiddlewareTest extends \Orchestra\Testbench\TestCase
     public function it_returns_403_non_valid_ip()
     {
         $response = $this->call('POST', 'api/sns');
-        if(is_a($response, 'Illuminate\Foundation\Testing\TestResponse')) {
+        if (is_a($response, 'Illuminate\Foundation\Testing\TestResponse')) {
             $response->assertStatus(403);
         } else {
             $this->seeStatusCode(403);
@@ -38,7 +38,7 @@ class AwsIpRangeMiddlewareTest extends \Orchestra\Testbench\TestCase
         $this->assertTrue(Cache::has(AwsIpRangeMiddleware::CACHE_KEY));
 
         $cache = Cache::get(AwsIpRangeMiddleware::CACHE_KEY);
-        $download = json_decode(file_get_contents(AwsIpRangeMiddleware::URL), TRUE);
+        $download = json_decode(file_get_contents(AwsIpRangeMiddleware::URL), true);
 
         $this->assertContains($download['prefixes'][0]['ip_prefix'], $cache);
         $this->assertContains($download['prefixes'][count($download['prefixes']) - 1]['ip_prefix'], $cache);
@@ -52,7 +52,7 @@ class AwsIpRangeMiddlewareTest extends \Orchestra\Testbench\TestCase
         foreach ($this->getValidIpAwsAddresses() as $ip) {
             $response = $this->call('POST', 'api/sns', [], [], [], ['REMOTE_ADDR' => $ip]);
 
-            if(is_a($response, 'Illuminate\Foundation\Testing\TestResponse')) {
+            if (is_a($response, 'Illuminate\Foundation\Testing\TestResponse')) {
                 $response->assertStatus(200);
             } else {
                 $this->seeStatusCode(200);
