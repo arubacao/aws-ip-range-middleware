@@ -22,7 +22,7 @@ class AwsIpRangeMiddlewareTest extends \Orchestra\Testbench\TestCase
     /** @test */
     public function it_returns_403_non_valid_ip()
     {
-        $response = $this->post('api/sns');
+        $response = $this->call('POST', 'api/sns');
         if(is_a($response, 'Illuminate\Foundation\Testing\TestResponse')) {
             $response->assertStatus(403);
         } else {
@@ -34,7 +34,7 @@ class AwsIpRangeMiddlewareTest extends \Orchestra\Testbench\TestCase
     public function it_caches_aws_ip_ranges()
     {
         $this->assertFalse(Cache::has(AwsIpRangeMiddleware::CACHE_KEY));
-        $response = $this->post('api/sns');
+        $response = $this->call('POST', 'api/sns');
         $this->assertTrue(Cache::has(AwsIpRangeMiddleware::CACHE_KEY));
 
         $cache = Cache::get(AwsIpRangeMiddleware::CACHE_KEY);
