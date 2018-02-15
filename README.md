@@ -1,11 +1,11 @@
-# Laravel Middleware for Amazon Web Services (AWS) IP Address Range
+# Laravel Middleware for Amazon Web Services (AWS) IP Address Range Validation
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/arubacao/aws-ip-range-middleware.svg?style=flat-square)](https://packagist.org/packages/arubacao/aws-ip-range-middleware)
 [![Build Status](https://img.shields.io/travis/arubacao/aws-ip-range-middleware/master.svg?style=flat-square)](https://travis-ci.org/arubacao/aws-ip-range-middleware)
 [![Codecov](https://img.shields.io/codecov/c/github/arubacao/aws-ip-range-middleware.svg?style=flat-square)](https://codecov.io/gh/arubacao/aws-ip-range-middleware)
 [![Total Downloads](https://img.shields.io/packagist/dt/arubacao/aws-ip-range-middleware.svg?style=flat-square)](https://packagist.org/packages/arubacao/aws-ip-range-middleware)
 
-This package allows for **verification** of incoming **requests** against the official [Amazon Web Services (AWS) IP Address Range](https://docs.aws.amazon.com/general/latest/gr/aws-ip-ranges.html).  
+This package allows for **validation** of incoming **requests** against the official [Amazon Web Services (AWS) IP Address Range](https://docs.aws.amazon.com/general/latest/gr/aws-ip-ranges.html).  
 Use this to determine if an incoming request actually comes from the AWS infrastructure e.g. for [Simple Notification Service (SNS)](https://docs.aws.amazon.com/sns/latest/dg/welcome.html) payloads.
 
 ## Features
