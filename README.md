@@ -9,7 +9,7 @@ This package allows for **validation** of incoming **requests** against the offi
 Use this to determine if an incoming request actually comes from the AWS infrastructure e.g. for [Simple Notification Service (SNS)](https://docs.aws.amazon.com/sns/latest/dg/welcome.html) payloads.
 
 ## Features
- - Check if incoming HTTP requests come from AWS 
+ - Passes incoming HTTP requests from AWS, rejects everything else 
  - AWS _ip address range_ is fetched on demand and therefore always up-to-date
  - Caching of _ip address range_ --> only fetched once per day
  - Retry with exponential back-off on network issues while fetching the _ip address range_ from AWS 
