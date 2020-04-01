@@ -15,7 +15,7 @@ Use this to determine if an incoming request actually comes from the AWS infrast
  - Retry with exponential back-off on network issues while fetching the _ip address range_ from AWS 
 
 #### Notes
- - `arubacao/aws-ip-range-middleware` is functional and fully tested for Laravel `5.0`, - `5.8` and PHP `7.0` - `7.3`.
+ - `arubacao/aws-ip-range-middleware` is functional and fully tested for Laravel `5.0`, - `7.*` and PHP `7.0` - `7.3`.
 ## Installation
 Install this package via composer:
 

@@ -23,7 +23,8 @@ class AwsIpRangeMiddlewareTest extends \Orchestra\Testbench\TestCase
     public function it_returns_403_non_valid_ip()
     {
         $response = $this->call('POST', 'api/sns');
-        if (is_a($response, 'Illuminate\Foundation\Testing\TestResponse')) {
+        if (is_a($response, 'Illuminate\Foundation\Testing\TestResponse') ||
+            is_a($response, 'Illuminate\Testing\TestResponse')) {
             $response->assertStatus(403);
         } else {
             $this->assertResponseStatus(403);
@@ -52,7 +53,8 @@ class AwsIpRangeMiddlewareTest extends \Orchestra\Testbench\TestCase
         foreach ($this->getValidIpAwsAddresses() as $ip) {
             $response = $this->call('POST', 'api/sns', [], [], [], ['REMOTE_ADDR' => $ip]);
 
-            if (is_a($response, 'Illuminate\Foundation\Testing\TestResponse')) {
+            if (is_a($response, 'Illuminate\Foundation\Testing\TestResponse') ||
+                is_a($response, 'Illuminate\Testing\TestResponse')) {
                 $response->assertStatus(200);
             } else {
                 $this->assertResponseStatus(200);
