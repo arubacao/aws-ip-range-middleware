@@ -2,8 +2,8 @@
 
 namespace Arubacao\AwsIpRange\Test;
 
-use Illuminate\Support\Facades\Cache;
 use Arubacao\AwsIpRange\AwsIpRangeMiddleware;
+use Illuminate\Support\Facades\Cache;
 
 class AwsIpRangeMiddlewareTest extends \Orchestra\Testbench\TestCase
 {
