@@ -3,9 +3,9 @@
 namespace Arubacao\AwsIpRange;
 
 use Closure;
+use GrahamCampbell\GuzzleFactory\GuzzleFactory;
 use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\IpUtils;
-use GrahamCampbell\GuzzleFactory\GuzzleFactory;
 
 class AwsIpRangeMiddleware
 {
