@@ -1,7 +1,7 @@
 # Laravel Middleware for Amazon Web Services (AWS) IP Address Range Validation
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/arubacao/aws-ip-range-middleware.svg?style=flat-square)](https://packagist.org/packages/arubacao/aws-ip-range-middleware)
-[![Build Status](https://img.shields.io/travis/arubacao/aws-ip-range-middleware/master.svg?style=flat-square)](https://travis-ci.org/arubacao/aws-ip-range-middleware)
+[![Run Tests](https://github.com/arubacao/aws-ip-range-middleware/workflows/Run%20Tests/badge.svg)](https://github.com/arubacao/aws-ip-range-middleware/actions?query=workflow%3A%22Run+Tests%22)
 [![Codecov](https://img.shields.io/codecov/c/github/arubacao/aws-ip-range-middleware.svg?style=flat-square)](https://codecov.io/gh/arubacao/aws-ip-range-middleware)
 [![Total Downloads](https://img.shields.io/packagist/dt/arubacao/aws-ip-range-middleware.svg?style=flat-square)](https://packagist.org/packages/arubacao/aws-ip-range-middleware)
 
