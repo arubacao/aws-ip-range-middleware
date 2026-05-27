@@ -33,12 +33,13 @@ class AwsIpRangeMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
-        if (! IpUtils::checkIp($request->ip(), $this->getAwsIpRanges())) {
+        if (!IpUtils::checkIp($request->ip(), $this->getAwsIpRanges())) {
             return response('', 403);
         }
 
@@ -69,18 +70,19 @@ class AwsIpRangeMiddleware
         $url = config('aws-ip-range.url') ?: self::URL;
 
         try {
-            $client = $this->client ?: new Client;
+            $client = $this->client ?: new Client();
             $response = $client->request('GET', $url);
             $json = (string) $response->getBody();
             $data = json_decode($json, true);
 
-            if (! is_array($data)) {
+            if (!is_array($data)) {
                 throw new \RuntimeException('AWS ip-ranges response was not valid JSON.');
             }
 
             return $data;
         } catch (Throwable $e) {
             Log::warning('Failed to fetch AWS IP ranges.', ['exception' => $e]);
+
             throw $e;
         }
     }
@@ -88,7 +90,8 @@ class AwsIpRangeMiddleware
     /**
      * Merge ipv4 & ipv6.
      *
-     * @param  array<string, mixed>  $array
+     * @param array<string, mixed> $array
+     *
      * @return array<int, string>
      */
     private function mergeRanges(array $array): array
