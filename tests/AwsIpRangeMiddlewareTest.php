@@ -118,7 +118,7 @@ class AwsIpRangeMiddlewareTest extends TestCase
 
         $this->artisan('vendor:publish', [
             '--provider' => AwsIpRangeServiceProvider::class,
-            '--tag'      => 'config',
+            '--tag' => 'config',
         ]);
 
         $this->assertFileExists($configPath);

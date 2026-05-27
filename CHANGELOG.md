@@ -31,7 +31,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - Support for PHP 7.x, PHP 8.0, and Laravel 5-8.
 - `.travis.yml` (long superseded by GitHub Actions).
-- `.styleci.yml` (replaced by Laravel Pint).
 - Inaccurate "Retry with exponential back-off" claim from the README; the feature was never implemented.
 
 ### Fixed
