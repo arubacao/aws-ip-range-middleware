@@ -2,87 +2,99 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/arubacao/aws-ip-range-middleware.svg?style=flat-square)](https://packagist.org/packages/arubacao/aws-ip-range-middleware)
 [![Run Tests](https://github.com/arubacao/aws-ip-range-middleware/workflows/Run%20Tests/badge.svg)](https://github.com/arubacao/aws-ip-range-middleware/actions?query=workflow%3A%22Run+Tests%22)
-[![Codecov](https://img.shields.io/codecov/c/github/arubacao/aws-ip-range-middleware.svg?style=flat-square)](https://codecov.io/gh/arubacao/aws-ip-range-middleware)
 [![Total Downloads](https://img.shields.io/packagist/dt/arubacao/aws-ip-range-middleware.svg?style=flat-square)](https://packagist.org/packages/arubacao/aws-ip-range-middleware)
 
-This package allows for **validation** of incoming **requests** against the official [Amazon Web Services (AWS) IP Address Range](https://docs.aws.amazon.com/general/latest/gr/aws-ip-ranges.html).  
+This package allows for **validation** of incoming **requests** against the official [Amazon Web Services (AWS) IP Address Range](https://docs.aws.amazon.com/general/latest/gr/aws-ip-ranges.html).
 Use this to determine if an incoming request actually comes from the AWS infrastructure e.g. for [Simple Notification Service (SNS)](https://docs.aws.amazon.com/sns/latest/dg/welcome.html) payloads.
 
 ## Features
- - Passes incoming HTTP requests from AWS, rejects everything else 
- - AWS _ip address range_ is fetched on demand and therefore always up-to-date
- - Caching of _ip address range_ --> only fetched once per day
- - Retry with exponential back-off on network issues while fetching the _ip address range_ from AWS 
+ - Passes incoming HTTP requests from AWS, rejects everything else with a `403`.
+ - AWS *IP address range* is fetched on demand and therefore always up-to-date.
+ - Caches the parsed *IP address range* (default: 24 hours).
+ - Source URL, cache key, and TTL are configurable.
 
-#### Notes
- - `arubacao/aws-ip-range-middleware` is functional and fully tested for Laravel `5.0` - `7.*` and PHP `7.0` - `7.3`.
+## Supported versions
+
+Actively tested in CI:
+
+| PHP   | Laravel      |
+|-------|--------------|
+| `8.1` | `9.*`, `10.*` |
+| `8.2` | `10.*`, `11.*` |
+| `8.3` | `11.*`, `12.*` |
+| `8.4` | `11.*`, `12.*` |
+
+This package requires PHP `8.1+` and Laravel `9+`.
+
 ## Installation
+
 Install this package via composer:
 
 ```bash
 composer require arubacao/aws-ip-range-middleware
 ```
 
-#### Registering Middleware
+Laravel registers the service provider automatically via package discovery. If package discovery is disabled, add the provider manually in `config/app.php`:
 
-First assign the _aws-ip-range-middleware_ a key in your `app/Http/Kernel.php` file to the `$routeMiddleware` property.
+```php
+'providers' => [
+    // ...
+    Arubacao\AwsIpRange\AwsIpRangeServiceProvider::class,
+],
+```
 
-```PHP
-// Within App\Http\Kernel Class...
+### Registering the middleware
+
+Assign the middleware a key in your `app/Http/Kernel.php`:
+
+```php
+// Within App\Http\Kernel...
 
 protected $routeMiddleware = [
-    'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
-    'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-    // .
-    // .
-    // .
+    // ...
     'aws-ip-range' => \Arubacao\AwsIpRange\AwsIpRangeMiddleware::class,
 ];
 ```
 
 ## Usage
 
-Once the _aws-ip-range-middleware_ has been defined in the HTTP kernel, you may use the middleware method to assign _aws-ip-range-middleware_ to a route:
-
-```PHP
+```php
 Route::post('api/sns', function () {
     //
 })->middleware('aws-ip-range');
-
-
-// Older Laravel Versions:
-Route::post('api/sns', ['middleware' => 'aws-ip-range', function () {
-    //
-}]);
 ```
 
-When assigning middleware, you may also pass the fully qualified class name:  
-_Note: In this case you do not need to register the aws-ip-range-middleware in the HTTP kernel_  
+You can also pass the fully qualified class name (no Kernel registration required):
 
-```PHP
+```php
 use Arubacao\AwsIpRange\AwsIpRangeMiddleware;
 
 Route::post('api/sns', function () {
     //
 })->middleware(AwsIpRangeMiddleware::class);
-
-
-// Older Laravel Versions:
-Route::post('api/sns', ['middleware' => AwsIpRangeMiddleware::class, function () {
-    //
-}]);
 ```
 
+## Configuration
 
-## Todo's
+Publish the config file to override the defaults:
 
- - Enable/Disable caching
- - Choose cache storage
- - Command to fetch ip address range and store locally 
+```bash
+php artisan vendor:publish --provider="Arubacao\AwsIpRange\AwsIpRangeServiceProvider" --tag=config
+```
+
+This creates `config/aws-ip-range.php`:
+
+```php
+return [
+    'url'       => env('AWS_IP_RANGE_URL', 'https://ip-ranges.amazonaws.com/ip-ranges.json'),
+    'cache_key' => env('AWS_IP_RANGE_CACHE_KEY', 'arubacao_aws-ip-ranges'),
+    'cache_ttl' => (int) env('AWS_IP_RANGE_CACHE_TTL', 86400),
+];
+```
 
 ## Testing
 
-``` bash
+```bash
 composer test
 ```
 
