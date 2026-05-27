@@ -4,85 +4,126 @@ on: [push, pull_request]
 
 jobs:
   test:
-
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        php: [7.1, 7.2, 7.3]
-        laravel: [5.0.*, 5.1.*, 5.2.*, 5.3.*, 5.4.*, 5.5.*, 5.6.*, 5.7.*, 5.8.*, 6.*, 7.*]
         include:
-          - laravel: 5.0.*
-            testbench: 3.0.*
-            phpunit: ~4.8.36
-          - laravel: 5.1.*
-            testbench: 3.1.*
-            phpunit: ~5.7.21
-          - laravel: 5.2.*
-            testbench: 3.2.*
-            phpunit: ~5.7.21
-          - laravel: 5.3.*
-            testbench: 3.3.*
-            phpunit: ~5.7.21
-          - laravel: 5.4.*
-            testbench: 3.4.*
-            phpunit: ~5.7.21
-          - laravel: 5.5.*
-            testbench: 3.5.*
-            phpunit: ~6.0
-          - laravel: 5.6.*
-            testbench: 3.6.*
-            phpunit: ^7.0
-          - laravel: 5.7.*
-            testbench: 3.7.*
-            phpunit: ^7.0
-          - laravel: 5.8.*
-            testbench: 3.8.*
-            phpunit: ^7.5
-          - laravel: 6.*
-            testbench: 4.*
-            phpunit: ">=7.5.15"
-          - laravel: 7.*
-            testbench: 5.*
-            phpunit: ">=8.4"
-        exclude:
-          - laravel: 5.0.*
-            php: 7.2
-          - laravel: 5.0.*
-            php: 7.3
-          - laravel: 6.*
-            php: 7.1
-          - laravel: 7.*
-            php: 7.1
-
+          # PHP 8.1
+          - php: '8.1'
+            laravel: '9.*'
+            testbench: '7.*'
+            phpunit: '^9.5'
+          - php: '8.1'
+            laravel: '10.*'
+            testbench: '8.*'
+            phpunit: '^10.0'
+          # PHP 8.2
+          - php: '8.2'
+            laravel: '10.*'
+            testbench: '8.*'
+            phpunit: '^10.0'
+          - php: '8.2'
+            laravel: '11.*'
+            testbench: '9.*'
+            phpunit: '^10.5'
+          # PHP 8.3
+          - php: '8.3'
+            laravel: '11.*'
+            testbench: '9.*'
+            phpunit: '^10.5'
+          - php: '8.3'
+            laravel: '12.*'
+            testbench: '10.*'
+            phpunit: '^11.0'
+          # PHP 8.4
+          - php: '8.4'
+            laravel: '11.*'
+            testbench: '9.*'
+            phpunit: '^10.5'
+          - php: '8.4'
+            laravel: '12.*'
+            testbench: '10.*'
+            phpunit: '^11.0'
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }}
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Cache dependencies
-        uses: actions/cache@v1
-        with:
-          path: ~/.composer/cache/files
-          key: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
+        uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: curl, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, iconv
-          coverage: xdebug
+          extensions: curl, mbstring, zip
+          coverage: none
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache/files
+          key: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
 
       - name: Install dependencies
         run: |
-          composer require "orchestra/testbench:${{ matrix.testbench }}" "phpunit/phpunit:${{ matrix.phpunit }}" --no-interaction --no-update
-          composer update --prefer-dist --no-interaction --no-suggest
+          composer config audit.block-insecure false
+          composer require --dev "orchestra/testbench:${{ matrix.testbench }}" "phpunit/phpunit:${{ matrix.phpunit }}" --no-interaction --no-update
+          composer update --prefer-dist --no-interaction --with-all-dependencies
 
       - name: Execute tests
-        run: vendor/bin/phpunit --coverage-clover=coverage.xml
+        run: vendor/bin/phpunit
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
+  static-analysis:
+    runs-on: ubuntu-latest
+    name: Static analysis
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
-          file: ./coverage.xml
+          php-version: '8.3'
+          extensions: curl, mbstring, zip
+          coverage: none
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache/files
+          key: dependencies-static-php-8.3-composer-${{ hashFiles('composer.json') }}
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction --with-all-dependencies
+
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse --no-progress
+
+  style:
+    runs-on: ubuntu-latest
+    name: Code style
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: curl, mbstring, zip
+          coverage: none
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache/files
+          key: dependencies-style-php-8.3-composer-${{ hashFiles('composer.json') }}
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction --with-all-dependencies
+
+      - name: Run Pint
+        run: vendor/bin/pint --test
